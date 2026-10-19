@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#102839" />
+  <meta name="description" content="KonutPlan: Ev fiyatı, peşinat, konut kredisi, faiz, ek borç, kira ve gelir ile ev alma sürenizi ve aylık nakit akışınızı hesaplayın. Verileriniz cihazınızda kalır." />
+  <meta name="color-scheme" content="light" />
+  <title>KonutPlan | Konut Finansmanı ve Birikim Simülatörü</title>
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="./app.mjs" type="module"></script>
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-header">
+      <a href="./" class="brand" aria-label="KonutPlan ana sayfa"><span class="brand-symbol" aria-hidden="true">⌂</span><span>Konut<span class="brand-accent">Plan</span></span></a>
+      <div class="top-actions"><span class="privacy-pill"><span class="dot"></span>Veriler cihazınızda kalır</span><button type="button" id="resetBtn" class="outline-button">↺ <span>Sıfırla</span></button></div>
+    </header>
+    <main>
+      <section class="hero">
+        <div class="eyebrow"><span class="eyebrow-line"></span> EV SAHİPLİĞİ PLANLAMA ARACI</div>
+        <div class="hero-flex"><div><h1>Bir evin maliyeti değil,<br><em>planınız net olsun.</em></h1>
+        <p>Gelirinizi, konut kredisini, peşinatı ve borçlarınızı değiştirin. Ne zaman ev alabileceğinizi ve sonrasında bütçenizde ne kalacağını anında görün.</p></div>
+        <div class="hero-side"><div class="hero-side-label">Örnekten başla, kendine göre düzenle</div><div class="hero-side-metrics"><span>28+</span><div>Ayarlanabilir<br>finansal parametre</div></div><div class="hero-side-underline"></div><small>Hesaplama yerel çalışır. Kayıt zorunlu değildir.</small></div></div>
+      </section>
+      <section class="summary-section" aria-label="Finansal özet">
+        <div class="section-heading"><div><span class="mini-kicker">ANLIK GÖSTERGE PANELİ</span><h2>Finansal görünüm</h2></div><div class="currency-box"><label for="currency">Para birimi</label><select id="currency"><option value="TRY">₺ TRY</option><option value="USD">$ USD</option><option value="EUR">€ EUR</option></select></div></div>
+        <div class="stat-grid">
+          <article class="stat primary-stat"><div class="stat-top"><span>Ev alma süresi</span><span class="stat-icon">↗</span></div><strong id="kpiPurchase">—</strong><span id="kpiPurchaseNote" class="stat-note">Varsayımlarınıza göre</span></article>
+          <article class="stat"><div class="stat-top"><span>Eksik birikim</span><span class="stat-icon">◈</span></div><strong id="kpiGap">—</strong><span class="stat-note">Bugünkü peşinat + rezerv</span></article>
+          <article class="stat"><div class="stat-top"><span>İlk dönem aylık net</span><span class="stat-icon">≋</span></div><strong id="kpiNet">—</strong><span class="stat-note">Tüm borç taksitlerinden sonra</span></article>
+          <article class="stat"><div class="stat-top"><span>Borçsuz mülkiyet</span><span class="stat-icon">✓</span></div><strong id="kpiFree">—</strong><span class="stat-note">Bugünden itibaren tahmin</span></article>
+        </div>
+        <div class="risk-banner" id="riskBanner" aria-live="polite"><span class="risk-symbol" id="riskIcon">i</span><div><strong id="riskTitle">Değerlendirme hazırlanıyor</strong><p id="riskDetail">Bilgileri değiştirdikçe risk değerlendirmesi güncellenir.</p></div></div>
+      </section>
+      <section class="workspace">
+        <div class="left-panel">
+          <div class="panel-heading"><div><span class="mini-kicker">SİMÜLASYON</span><h2>Varsayımlarınızı düzenleyin</h2></div><span class="small-note">Tüm alanlar değiştirilebilir</span></div>
+          <nav class="tabs" role="tablist" aria-label="Finansal parametre kategorileri">
+            <button class="tab active" data-tab="income" id="tab-income" aria-controls="panel-fields" role="tab" aria-selected="true">Gelir & birikim</button>
+            <button class="tab" data-tab="house" id="tab-house" aria-controls="panel-fields" role="tab" aria-selected="false">Ev & kredi</button>
+            <button class="tab" data-tab="debt" id="tab-debt" aria-controls="panel-fields" role="tab" aria-selected="false">Borç & kira</button>
+            <button class="tab" data-tab="risk" id="tab-risk" aria-controls="panel-fields" role="tab" aria-selected="false">Piyasa & risk</button>
+          </nav>
+          <div id="panel-fields" role="tabpanel" aria-labelledby="tab-income" class="controls-grid"></div>
+          <div class="panel-footer"><span>ⓘ Kredi sınırları bilgi amaçlı varsayımlardır; banka onayı değildir.</span></div>
+        </div>
+        <aside class="right-panel" aria-label="Ayrıntılı finansal sonuçlar">
+          <div class="right-head"><span class="mini-kicker">HESAPLAMA SONUÇLARI</span><h2>Planınızın özeti</h2><p>Satın alma öncesi ve sonrasındaki tabloyu birlikte değerlendirin.</p></div>
+          <div class="metric-block"><span>Eve giriş için gereken birikim</span><strong id="purchaseCash">—</strong><small>Satın alma masrafları ve nakit rezervi dahil</small></div>
+          <div class="progress-heading"><span>Birikim ilerlemesi</span><strong id="progressPct">—</strong></div><div class="progress-track"><div id="progressBar"></div></div>
+          <div class="finance-divider"></div>
+          <div class="fin-row"><span>Aylık konut kredisi</span><b id="monthMortgage">—</b></div>
+          <div class="fin-row"><span>Aylık özel borç</span><b id="monthPrivate">—</b></div>
+          <div class="fin-row"><span>Hesaba katılan kira</span><b id="monthRent">—</b></div>
+          <div class="fin-row"><span>İlk dönemde aylık kalan</span><b id="monthNet">—</b></div>
+          <div class="fin-row fin-row-emphasis"><span>Kiracı & ek gelir yoksa</span><b id="monthStress">—</b></div>
+          <div class="mini-infobox" id="bankInfo">Kredi sınırı hesaplanıyor...</div>
+          <button class="save-button" id="addScenarioBtn" type="button"><span>＋</span> Bu planı karşılaştırmaya ekle</button>
+        </aside>
+      </section>
+      <section class="chart-section">
+        <div class="section-heading"><div><span class="mini-kicker">ZAMANA YAYILAN PLAN</span><h2>Birikim hedefe ne zaman ulaşır?</h2><p class="section-desc">Çizgiler: birikiminiz ve satın alma için gereken özkaynak. Banka uygunluğu ayrıca kontrol edilir.</p></div><span class="chart-badge">60 aylık görünüm</span></div>
+        <div class="chart-card"><div class="chart-legend"><span><i class="legend-dot teal"></i> Birikim</span><span><i class="legend-dot orange"></i> İhtiyaç duyulan tutar</span></div><div id="chart" aria-label="Birikim ve hedef karşılaştırma grafiği" role="img"></div></div>
+        <div class="comparison-band"><div><small>Mevcut senaryo</small><strong id="comparisonCurrent">—</strong></div><div><small>Ek gelir sıfır olursa</small><strong id="comparisonNoFreelance">—</strong></div><div><small>Özel borç alınmazsa</small><strong id="comparisonNoDebt">—</strong></div></div>
+      </section>
+      <section class="details-section"><div class="section-heading"><div><span class="mini-kicker">AYRINTILI ÇIKTILAR</span><h2>Maliyet, geri ödeme ve risk</h2></div></div><div class="detail-grid">
+        <article class="detail-card"><div class="detail-heading"><span class="detail-icon">▤</span><h3>Satın alma bütçesi</h3></div><div id="purchaseBreakdown"></div></article>
+        <article class="detail-card"><div class="detail-heading"><span class="detail-icon">⌁</span><h3>Kredi geri ödemesi</h3></div><div id="creditBreakdown"></div></article>
+        <article class="detail-card"><div class="detail-heading"><span class="detail-icon">◎</span><h3>Gelir kaybı stres testi</h3></div><div id="stressBreakdown"></div></article>
+      </div></section>
+      <section class="saved-section"><div class="section-heading"><div><span class="mini-kicker">ALTERNATİFLER</span><h2>Planları yan yana karşılaştırın</h2><p class="section-desc">En fazla 3 farklı finansman planını bu sayfada karşılaştırabilirsiniz.</p></div><button id="clearCompareBtn" class="text-button" type="button">Karşılaştırmayı temizle</button></div><div id="scenarioList" class="scenario-list"><p class="empty-message">Bir plan eklediğinizde karşılaştırma burada görünecek.</p></div></section>
+      <section class="privacy-section"><div class="privacy-section-icon">♧</div><div><h2>Hesaplamalar size özel, bilgileriniz size ait.</h2><p>Bu site analizleri tarayıcınızda yapar. Sunucuya gelir, kredi veya birikim bilgisi göndermez. Bilgileri yalnızca siz “Cihaza kaydet” düğmesine basarsanız bu tarayıcıda saklar.</p></div><div class="privacy-actions"><button id="saveLocalBtn" class="outline-button" type="button">Cihaza kaydet</button><button id="loadLocalBtn" class="outline-button" type="button">Kaydı yükle</button><button id="exportBtn" class="outline-button" type="button">JSON indir</button><button id="deleteLocalBtn" class="text-button" type="button">Yerel kaydı sil</button></div></section>
+    </main>
+    <footer class="site-footer"><div><strong>Konut<span>Plan</span></strong><small>Ev almanın farklı yollarını sayılarla karşılaştırın.</small></div><div class="footer-note">Finansal danışmanlık veya kredi onayı değildir. Tüm oranlar kullanıcı tarafından düzenlenebilir.<br>Hesaplamalar tahminidir; tapu, vergi, erken ödeme ve diğer masraflar ayrıca doğrulanmalıdır.</div></footer>
+  </div>
+  <div id="toast" aria-live="polite" role="status"></div>
+</body>
+</html>
